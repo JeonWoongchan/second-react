@@ -43,3 +43,7 @@
   background-size : cover;
   background-position : center;
 }
+
+.none{
+  display: none;
+}

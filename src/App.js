@@ -29,7 +29,7 @@ function App() {
               style={{ maxHeight: '100px' }}
               navbarScroll
             >
-              <Nav.Link href="" onClick={()=>{navigate('/detail')}}>detail</Nav.Link>
+              <Nav.Link href="" onClick={()=>{navigate('/detail/0')}}>detail</Nav.Link>
               <Nav.Link href="" onClick={()=>{navigate('/about')}}>About</Nav.Link>
               <NavDropdown title="Link" id="navbarScrollingDropdown">
                 <NavDropdown.Item href="" onClick={()=>{navigate('/event')}}>Event</NavDropdown.Item>
@@ -70,17 +70,15 @@ function App() {
             <div className='main-bg'></div>
             <Container>
               <Row>
-                <Products shoes={shoes}></Products>
+                <Products shoes={shoes} ></Products>
               </Row>
             </Container>
           </>   
         }/>
-        <Route path="/detail" element={
-          <>
-          <div>상세페이지</div>
-          <Detail/>
-          </>
-        }/>
+
+        {/* /detail/:id -> url 파라미터 */}
+        <Route path="/detail/:id" element={<Detail shoes={shoes} data={data}/>}/>
+
         {/* nested Route : 라우트 안에 라우트*/}
         <Route path="/about" element={<About/>}>
           {/* 경로 : /about/member 
@@ -90,10 +88,12 @@ function App() {
           <Route path="member" element={<div>맴버</div>}/>
           <Route path="location" element={<div>위치</div>}/>
         </Route>
+
         <Route path="/event" element={<Event/>}>
           <Route path="one" element={<div>첫 주문시 양배추즙 서비스</div>}/>
           <Route path="two" element={<div>생일기념 쿠폰받기</div>}/>
         </Route>
+
         <Route path="*" element={<div>404</div>}/>
         {/* path="*": 이외의 모든 경로 */}
       </Routes>   
@@ -101,7 +101,7 @@ function App() {
   );
 }
 
-//상품목록 컨테이너 
+//상품목록 
 function Products(props){
   return(
     <>
@@ -110,7 +110,9 @@ function Products(props){
         return(
           <Col key={i}>
             {/* 이미지 링크에 변수넣기 */}
-            <img src={'https://codingapple1.github.io/shop/shoes'+ (i+1) +'.jpg'} width={'80%'}/>
+            <Link to={"/detail/"+i}>
+              <img src={'https://codingapple1.github.io/shop/shoes'+ (i+1) +'.jpg'} width={'80%'}/>
+            </Link>
             <h4>{props.shoes[i].title}</h4>
             <p>{props.shoes[i].content}</p>
           </Col>
