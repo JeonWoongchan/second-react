@@ -44,6 +44,8 @@
   background-position : center;
 }
 
-.none{
-  display: none;
+.modal{
+  background-color: black;
+  width: 15px;
+  margin: 0 auto;
 }

@@ -2,18 +2,25 @@
 import logo from './logo.svg';
 import './App.css';
 import data from './data.js';
-import Detail from './pages/Detail.js'
-import About from './pages/About.js'
-import Event from './pages/Event.js'
+import Detail from './pages/Detail.js';
+import About from './pages/About.js';
+import Event from './pages/Event.js';
+import axios from 'axios'; // axios : ajax 요청 쉽게 해주는 라이브러리
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {Button, Navbar, Container, Nav, NavDropdown, Form, Row, Col} from 'react-bootstrap/';
 import {Route, Routes, Link, useNavigate, Outlet} from 'react-router-dom';
 
 function App() {
 
-  let [shoes] = useState(data);
+  let [shoes, setShoes] = useState(data);
   let navigate = useNavigate(); //페이지 이동을 도와주는 함수 navigate(1 또는 -1) 한페이지 앞으로, 뒤로
+  let [버튼글, 버튼글변경] = useState('더보기'); // 더보기 버튼텍스트
+  let [클릭횟수, 클릭횟수변경] = useState(0); // 더보기 버튼 누른 횟수
+
+  useEffect(()=>{
+    console.log(클릭횟수)
+  }, [클릭횟수])
 
   return (
     <div className="App">
@@ -66,13 +73,38 @@ function App() {
       <Routes>
         <Route path="/" element={
           <>
-            <div>메인페이지</div>
             <div className='main-bg'></div>
-            <Container>
-              <Row>
+            <div className='container'>
+              <div className='row'>
                 <Products shoes={shoes} ></Products>
-              </Row>
-            </Container>
+              </div>
+            </div>
+            <button onClick={()=>{ 
+              버튼글변경('🔄');
+              if(클릭횟수<2){
+                axios.get('https://codingapple1.github.io/shop/data' + (클릭횟수+2) + '.json')
+                .then((e)=>{
+                  let copy = [...shoes, ...e.data];
+                  setShoes(copy);
+                  클릭횟수변경(클릭횟수+1);
+                  버튼글변경('더보기');
+                }) // 요청 결과
+                .catch(()=>{
+                  console.log('실패');
+                  버튼글변경('더보기');
+                })// get 실패했딘을때
+              }else{
+                alert('더보기 상품 없음');
+              }
+
+              // axios.post('/경로', {naem: 'kim'})//ajax전송
+
+              // Promise.all([axios.get('adasd'), axios.get('adasdas')]) // ajax요청 여러개 처리
+              // .then(()=>{})
+              // //원래 json형식 변환해야되는데 axios가 해줌
+
+              // fetch('~~~.json')//기본JS문법으로 가져오기 -> json 가져오면 문자로 변환하는 코드 써야됨
+            }}>{버튼글}</button>
           </>   
         }/>
 
@@ -107,15 +139,17 @@ function Products(props){
     <>
       {
       props.shoes.map((a,i)=>{
+        let A = props.shoes.find(e => e.id == i);
         return(
-          <Col key={i}>
-            {/* 이미지 링크에 변수넣기 */}
-            <Link to={"/detail/"+i}>
-              <img src={'https://codingapple1.github.io/shop/shoes'+ (i+1) +'.jpg'} width={'80%'}/>
+          <div className='col-md-4' key={i}>
+            {/* 이미지 링크에 변수넣기 
+            똑같은 상품 정보 불러와서 정보 겹치면 오류뜸*/}
+            <Link to={"/detail/"+A.id}>
+              <img src={'https://codingapple1.github.io/shop/shoes'+ (A.id+1) +'.jpg'} width={'80%'}/>
             </Link>
-            <h4>{props.shoes[i].title}</h4>
-            <p>{props.shoes[i].content}</p>
-          </Col>
+            <h4>{A.title}</h4>
+            <p>{A.content}</p>
+          </div>
           )
         })
       }
