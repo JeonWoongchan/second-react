@@ -3,11 +3,12 @@ import logo from './logo.svg';
 import './App.css';
 import data from './data.js';
 import Detail from './pages/Detail.js';
+import Cart from './pages/Cart.js';
 import About from './pages/About.js';
 import Event from './pages/Event.js';
 import axios from 'axios'; // axios : ajax 요청 쉽게 해주는 라이브러리
 
-import { useEffect, useState } from 'react';
+import {useEffect, useState} from 'react';
 import {Button, Navbar, Container, Nav, NavDropdown, Form, Row, Col} from 'react-bootstrap/';
 import {Route, Routes, Link, useNavigate, Outlet} from 'react-router-dom';
 
@@ -17,10 +18,6 @@ function App() {
   let navigate = useNavigate(); //페이지 이동을 도와주는 함수 navigate(1 또는 -1) 한페이지 앞으로, 뒤로
   let [버튼글, 버튼글변경] = useState('더보기'); // 더보기 버튼텍스트
   let [클릭횟수, 클릭횟수변경] = useState(0); // 더보기 버튼 누른 횟수
-
-  useEffect(()=>{
-    console.log(클릭횟수)
-  }, [클릭횟수])
 
   return (
     <div className="App">
@@ -37,11 +34,11 @@ function App() {
               navbarScroll
             >
               <Nav.Link href="" onClick={()=>{navigate('/detail/0')}}>detail</Nav.Link>
-              <Nav.Link href="" onClick={()=>{navigate('/about')}}>About</Nav.Link>
+              <Nav.Link href="" onClick={()=>{navigate('/cart')}}>Cart</Nav.Link>
               <NavDropdown title="Link" id="navbarScrollingDropdown">
                 <NavDropdown.Item href="" onClick={()=>{navigate('/event')}}>Event</NavDropdown.Item>
-                <NavDropdown.Item href="">
-                  Another action
+                <NavDropdown.Item href="" onClick={()=>{navigate('/about')}}>
+                  About
                 </NavDropdown.Item>
                 <NavDropdown.Divider />
                 <NavDropdown.Item href="">
@@ -111,8 +108,10 @@ function App() {
         {/* /detail/:id -> url 파라미터 */}
         <Route path="/detail/:id" element={<Detail shoes={shoes} data={data}/>}/>
 
+        <Route path="/cart" element={<Cart/>}/>
+
         {/* nested Route : 라우트 안에 라우트*/}
-        <Route path="/about" element={<About/>}>
+        <Route path="/cart" element={<About/>}>
           {/* 경로 : /about/member 
           nested 된 라우트 들은 어디에 보여줄지 작성해야됨 -> 컨테이너에 <Outlet> 작성
           위에 꺼랑 같이 보여줌, 페이지에서 어느 부분만 바꿔야될때 사용하면 편리

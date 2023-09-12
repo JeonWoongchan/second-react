@@ -49,3 +49,12 @@
   width: 15px;
   margin: 0 auto;
 }
+
+.start{
+  opacity: 0;
+}
+
+.end{
+  opacity: 1;
+  transition: opacity 0.5s;
+}
