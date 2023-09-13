@@ -66,6 +66,20 @@ function Detail(props){
         })
     }, [])
 
+    useEffect(()=>{// 최근본상품 localStorage에 등록
+        let obj = {id : product.id, name : product.title};
+        let watchList = JSON.parse(localStorage.getItem('watched'));
+        if(watchList.findIndex(e=>e.id == product.id) == -1){ // localStorage에 상품 id가 없으면
+            watchList.push(obj);
+            localStorage.setItem('watched', JSON.stringify(watchList));
+        }
+        //if문 대신 Set 자료형 사용가능하긴 한데 객체배열에서는 안되는듯?
+        // watchList.push(obj);
+        // watchList = new Set(watchList); // 객체임
+        // watchList = [...watchList];// 다시 배열로 바꿈
+        // localStorage.setItem('watched', JSON.stringify(watchList));
+    },[])  
+
     return(
         <div className='container'>
             {
@@ -113,7 +127,7 @@ function TabContent({탭, shoes}){ // 탭 컴포넌트
     // 대안: Context API, Redux등 외부 라이브러리
     let [fade, setFade] = useState('');
     useEffect(()=>{ 
-        //end 떼었다가 붙여야지 애니메이션 작동
+        // end 떼었다가 붙여야지 애니메이션 작동
         // setFade(''); //근데 이렇게 쓰면 안됨 -> 근처에있는 state는 모아서 한번에 실행됨 그래서 setTimeout 으로 시간차 두고 실행하게함
         setTimeout(()=>{setFade('end');}, 10)
         return(()=>{

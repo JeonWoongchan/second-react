@@ -13,16 +13,28 @@ import {Button, Navbar, Container, Nav, NavDropdown, Form, Row, Col} from 'react
 import {Route, Routes, Link, useNavigate, Outlet} from 'react-router-dom';
 
 function App() {
+  //localStorage : obj자료 넣기
+  //Redux state를 locolStorage에 자동으로 저장해주는 라이브러리도 있음
+  let obj = {name: 'kim'};
+  localStorage.setItem('data', JSON.stringify(obj)); //이름 data인 로컬스토리지 저장
+  let 꺼낸거 = localStorage.getItem('data');
+  // console.log(JSON.parse(꺼낸거).name) // obj 출력
 
   let [shoes, setShoes] = useState(data);
   let navigate = useNavigate(); //페이지 이동을 도와주는 함수 navigate(1 또는 -1) 한페이지 앞으로, 뒤로
   let [버튼글, 버튼글변경] = useState('더보기'); // 더보기 버튼텍스트
   let [클릭횟수, 클릭횟수변경] = useState(0); // 더보기 버튼 누른 횟수
 
+  useEffect(()=>{
+    if(localStorage.getItem('watched') === null){ // 로컬스토리지 없으면
+      localStorage.setItem('watched', JSON.stringify( [] )); // 최근 본 상품 localStorage 생성
+    }
+  },[])
+
   return (
     <div className="App">
 
-      {/* Navbar */}
+      {/* Navbar */}  
       <Navbar expand="lg" className="bg-body-tertiary">
         <Container fluid>
           <Navbar.Brand href="" onClick={()=>{navigate('/')}}>Navbar scroll</Navbar.Brand>
