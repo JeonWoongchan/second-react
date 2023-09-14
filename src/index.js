@@ -6,14 +6,20 @@ import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import store from './store.js';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+// react-query : ajax 도움주는 라이브러리, 실시간 통신에 유용
+
+const queryClient = new QueryClient();
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
+  <QueryClientProvider client={queryClient}>
     <Provider store={store}>
     <BrowserRouter>
       <App />
     </BrowserRouter>
     </Provider>
+  </QueryClientProvider>
 );
 
 // If you want to start measuring performance in your app, pass a function
